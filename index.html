@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A_REMPLACER</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="A_REMPLACER">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <!-- Même fichier de correspondance que la vraie appli : code du lien -> numéro de participant -->
+  <script src="mapping_key_to_subId.js"></script>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 6vw; text-align: center; color: #222; }
+    img.icon { width: 28vw; max-width: 140px; border-radius: 22%; margin: 4vh 0 2vh; }
+    h1 { font-size: 7vw; margin: 0 0 3vh; }
+    p, li { font-size: 4.6vw; line-height: 1.4; }
+    ol { text-align: left; max-width: 520px; margin: 0 auto 3vh; }
+    .note { font-size: 3.8vw; color: #666; }
+    .hidden { display: none; }
+    .error { color: #b00020; }
+    @media (min-width: 600px) { h1 { font-size: 36px; } p, li { font-size: 20px; } .note { font-size: 16px; } }
+  </style>
+</head>
+<body>
+  <div id="loading"><p>Chargement...</p></div>
+
+  <div id="error" class="hidden">
+    <h1>Lien incorrect</h1>
+    <p class="error">Ce lien est incomplet ou incorrect. Merci d'utiliser le lien complet qui vous a été envoyé.</p>
+  </div>
+
+  <div id="install" class="hidden">
+    <img class="icon" src="./icon-192.png" alt="">
+    <h1>Installer A_REMPLACER</h1>
+    <p>Ajoutez l'application à votre écran d'accueil, puis placez son icône à l'endroit où se trouvait l'ancienne.</p>
+
+    <div id="android" class="hidden">
+      <h2>Sur Android</h2>
+      <ol>
+        <li>Ouvrez cette page dans <b>Chrome</b>.</li>
+        <li>Appuyez sur le menu <b>⋮</b> (en haut à droite).</li>
+        <li>Appuyez sur <b>« Installer l'application »</b> ou <b>« Ajouter à l'écran d'accueil »</b>, puis confirmez.</li>
+      </ol>
+    </div>
+
+    <div id="ios" class="hidden">
+      <h2>Sur iPhone</h2>
+      <ol>
+        <li>Ouvrez cette page dans <b>Safari</b>.</li>
+        <li>Appuyez sur le bouton <b>Partager</b> (le carré avec une flèche).</li>
+        <li>Appuyez sur <b>« Sur l'écran d'accueil »</b>, puis confirmez.</li>
+      </ol>
+    </div>
+
+    <p class="note">Si ce message ne ressemble pas à ce que vous voyez, ouvrez le lien directement dans Safari (iPhone) ou dans Chrome (Android), et non depuis une autre application.</p>
+  </div>
+
+  <script>
+    // ---------------------------------------------------------------
+    // RÉGLAGES : adresse du questionnaire Qualtrics et nom du paramètre
+    // (le paramètre doit exister comme "Embedded Data" dans le Survey Flow de Qualtrics)
+    // ---------------------------------------------------------------
+    var SURVEY_URL = "https://parisouestpsy.eu.qualtrics.com/jfe/form/SV_7Xadmx7jFD4IrD8";
+    var ID_PARAM = "participant_id";
+    // ---------------------------------------------------------------
+
+    function show(id) { document.getElementById(id).classList.remove('hidden'); }
+    function hide(id) { document.getElementById(id).classList.add('hidden'); }
+
+    (function () {
+      var key = new URLSearchParams(location.search).get('subId');
+      var participantId;
+      try { participantId = (typeof key2subId_mapping !== 'undefined' && key) ? key2subId_mapping[key] : undefined; } catch (e) { }
+
+      hide('loading');
+      if (participantId === undefined) { show('error'); return; }
+
+      var isStandalone = window.navigator.standalone === true ||
+        (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+
+      if (isStandalone) {
+        // L'icône installée a été ouverte : on envoie directement vers Qualtrics avec le bon numéro
+        var url = SURVEY_URL + (SURVEY_URL.indexOf('?') === -1 ? '?' : '&') + ID_PARAM + '=' + encodeURIComponent(participantId);
+        window.location.replace(url);
+        return;
+      }
+
+      // Page d'installation : on relie le manifeste propre à ce participant (il contient son lien personnel)
+      var link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = 'manifests/manifest_' + key + '.json';
+      document.head.appendChild(link);
+
+      var ua = navigator.userAgent || '';
+      var isIOS = /iPad|iPhone|iPod/.test(ua);
+      var isAndroid = /android/i.test(ua);
+      if (isIOS) show('ios'); else if (isAndroid) show('android'); else { show('android'); show('ios'); }
+      show('install');
+    })();
+  </script>
+</body>
+</html>
