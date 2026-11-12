@@ -1,0 +1,22 @@
+{
+  "id": "https://de-zhou.github.io/FakeApp/index.html?subId=91DdiHQ7WWZ61g5LOqSE",
+  "name": "Space Gold",
+  "short_name": "Space Gold",
+  "start_url": "https://de-zhou.github.io/FakeApp/index.html?subId=91DdiHQ7WWZ61g5LOqSE",
+  "scope": "https://de-zhou.github.io/FakeApp/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "https://de-zhou.github.io/FakeApp/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://de-zhou.github.io/FakeApp/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
