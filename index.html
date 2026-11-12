@@ -64,7 +64,7 @@
     // (le paramètre doit exister comme "Embedded Data" dans le Survey Flow de Qualtrics)
     // ---------------------------------------------------------------
     var SURVEY_URL = "https://parisouestpsy.eu.qualtrics.com/jfe/form/SV_7Xadmx7jFD4IrD8";
-    var ID_PARAM = "participant_id";
+    var ID_PARAM = "subID";
     // ---------------------------------------------------------------
 
     function show(id) { document.getElementById(id).classList.remove('hidden'); }
@@ -72,18 +72,18 @@
 
     (function () {
       var key = new URLSearchParams(location.search).get('subId');
-      var participantId;
-      try { participantId = (typeof key2subId_mapping !== 'undefined' && key) ? key2subId_mapping[key] : undefined; } catch (e) { }
+      var subID;
+      try { subID = (typeof key2subId_mapping !== 'undefined' && key) ? key2subId_mapping[key] : undefined; } catch (e) { }
 
       hide('loading');
-      if (participantId === undefined) { show('error'); return; }
+      if (subID === undefined) { show('error'); return; }
 
       var isStandalone = window.navigator.standalone === true ||
         (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
 
       if (isStandalone) {
         // L'icône installée a été ouverte : on envoie directement vers Qualtrics avec le bon numéro
-        var url = SURVEY_URL + (SURVEY_URL.indexOf('?') === -1 ? '?' : '&') + ID_PARAM + '=' + encodeURIComponent(participantId);
+        var url = SURVEY_URL + (SURVEY_URL.indexOf('?') === -1 ? '?' : '&') + ID_PARAM + '=' + encodeURIComponent(subID);
         window.location.replace(url);
         return;
       }
