@@ -8,8 +8,8 @@ import json
 import os
 
 # ---------- A REMPLACER ----------
-APP_NAME = "A_REMPLACER"  # EXACTEMENT le même nom que la vraie appli
-BASE_URL = "https://A_REMPLACER.github.io/A_REMPLACER"  # adresse du site de la fausse appli, sans "/" à la fin
+APP_NAME = "Space Gold"  # EXACTEMENT le même nom que la vraie appli
+BASE_URL = "https://de-zhou.github.io/FakeApp"  # adresse du site de la fausse appli, sans "/" à la fin
 # ---------------------------------
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
